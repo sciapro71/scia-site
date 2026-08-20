@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrosserie Lomrye — Carrosserie, Peinture & Mécanique à Champforgeuil (71)</title>
+  <meta name="description" content="Carrosserie Lomrye à Champforgeuil : carrosserie, peinture, débosselage, bris de glace, mécanique et pneus sans rendez-vous. Toutes marques, toutes assurances. Dépannage 24h/24 : 06 29 12 43 35.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚗</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0b0d;
+      --surface: #16161b;
+      --surface-2: #1d1d24;
+      --line: rgba(249, 115, 22, 0.16);
+      --line-strong: rgba(249, 115, 22, 0.5);
+      --orange: #f97316;
+      --orange-hot: #fb923c;
+      --text: #f4f4f2;
+      --dim: #9b9ba3;
+      --ok: #4ade80;
+      --display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+      --body: "Barlow", "Segoe UI", sans-serif;
+      --cond: "Barlow Condensed", "Arial Narrow", sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 22px; }
+    section { position: relative; }
+
+    /* ===== Bandes diagonales signalisation ===== */
+    .hazard {
+      height: 10px;
+      background: repeating-linear-gradient(-45deg, var(--orange) 0 18px, #111 18px 36px);
+    }
+
+    /* ===== Navigation ===== */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      border-bottom: 1px solid transparent;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .nav.scrolled {
+      background: rgba(11, 11, 13, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom-color: var(--line);
+    }
+    .nav-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 14px 22px;
+      display: flex;
+      align-items: center;
+      gap: 26px;
+    }
+    .brand { display: flex; flex-direction: column; text-decoration: none; line-height: 1; }
+    .brand-top {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: 0.04em;
+      color: var(--orange);
+      text-transform: uppercase;
+    }
+    .brand-bottom {
+      font-family: var(--cond);
+      font-weight: 600;
+      font-size: 0.78rem;
+      letter-spacing: 0.42em;
+      color: var(--text);
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+    .brand-stars { color: var(--orange); font-size: 0.6rem; letter-spacing: 0.5em; margin-top: 3px; }
+    .nav-links { display: flex; gap: 24px; margin-left: auto; }
+    .nav-links a {
+      position: relative;
+      color: var(--dim);
+      text-decoration: none;
+      font-family: var(--cond);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -6px;
+      width: 100%; height: 2px;
+      background: var(--orange);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-phone {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: var(--orange);
+      color: #0b0b0d;
+      text-decoration: none;
+      font-family: var(--cond);
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 0.05em;
+      padding: 10px 18px;
+      border-radius: 8px;
+      box-shadow: 0 0 22px rgba(249, 115, 22, 0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+      white-space: nowrap;
+    }
+    .nav-phone:hover { transform: translateY(-2px); box-shadow: 0 0 34px rgba(249, 115, 22, 0.55); }
+    .burger { display: none; }
+
+    /* ===== Hero ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 130px 0 70px;
+      background:
+        radial-gradient(ellipse 70% 55% at 78% 20%, rgba(249, 115, 22, 0.14), transparent 60%),
+        radial-gradient(ellipse 60% 50% at 15% 85%, rgba(249, 115, 22, 0.07), transparent 60%),
+        var(--bg);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(244, 244, 242, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(244, 244, 242, 0.03) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
+    }
+    #sprayCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .hero .container { position: relative; z-index: 2; }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--cond);
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--orange);
+      border: 1px solid var(--line-strong);
+      padding: 8px 16px;
+      border-radius: 4px;
+      background: rgba(249, 115, 22, 0.06);
+      margin-bottom: 26px;
+    }
+    .open-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 10px var(--ok); }
+    .hero h1 {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: clamp(3rem, 9vw, 6.4rem);
+      line-height: 0.95;
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+      margin-bottom: 22px;
+      text-wrap: balance;
+    }
+    .hero h1 .stroke {
+      color: transparent;
+      -webkit-text-stroke: 2px var(--text);
+    }
+    .hero h1 .orange { color: var(--orange); }
+    .hero-sub {
+      max-width: 560px;
+      color: var(--dim);
+      font-size: 1.12rem;
+      margin-bottom: 34px;
+    }
+    .hero-sub strong { color: var(--text); }
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 40px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--cond);
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .btn-orange {
+      background: var(--orange);
+      color: #0b0b0d;
+      box-shadow: 0 6px 28px rgba(249, 115, 22, 0.4);
+    }
+    .btn-orange:hover { transform: translateY(-3px); box-shadow: 0 10px 40px rgba(249, 115, 22, 0.6); }
+    .btn-line {
+      border: 2px solid rgba(244, 244, 242, 0.35);
+      color: var(--text);
+    }
+    .btn-line:hover { border-color: var(--orange); color: var(--orange); transform: translateY(-3px); }
+    .hero-badges { display: flex; gap: 26px; flex-wrap: wrap; }
+    .hero-badge { display: flex; align-items: center; gap: 10px; color: var(--dim); font-size: 0.95rem; }
+    .hero-badge b { color: var(--text); font-weight: 600; }
+    .badge-ico {
+      width: 38px; height: 38px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: rgba(249, 115, 22, 0.08);
+      color: var(--orange);
+    }
+    .badge-ico svg { width: 20px; height: 20px; }
+    .spray-hint {
+      position: absolute;
+      right: 34px; bottom: 26px;
+      z-index: 2;
+      font-family: var(--cond);
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dim);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.85;
+    }
+    .spray-hint .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--orange); animation: sprayPulse 1.6s infinite; }
+    @keyframes sprayPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.7); }
+      55% { box-shadow: 0 0 0 10px rgba(249, 115, 22, 0); }
+    }
+
+    /* ===== Marquee ===== */
+    .marquee {
+      overflow: hidden;
+      background: var(--orange);
+      padding: 13px 0;
+    }
+    .marquee-track {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+      width: max-content;
+      animation: marquee 24s linear infinite;
+    }
+    .marquee:hover .marquee-track { animation-play-state: paused; }
+    .marquee-track span {
+      font-family: var(--cond);
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #0b0b0d;
+      white-space: nowrap;
+    }
+    .marquee-track i { font-style: normal; color: #0b0b0d; opacity: 0.55; }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+
+    /* ===== Sections communes ===== */
+    .section { padding: 100px 0; }
+    .sec-head { max-width: 720px; margin-bottom: 54px; }
+    .sec-eyebrow {
+      font-family: var(--cond);
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--orange);
+      display: block;
+      margin-bottom: 10px;
+    }
+    .sec-head h2 {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+      line-height: 1;
+      text-transform: uppercase;
+      text-wrap: balance;
+    }
+    .sec-head p { color: var(--dim); margin-top: 14px; font-size: 1.05rem; }
+
+    /* ===== Avant / Après ===== */
+    .ba-wrap {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: linear-gradient(180deg, #131318, #0e0e12);
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+      cursor: ew-resize;
+    }
+    .ba-stage { position: relative; aspect-ratio: 16 / 8; }
+    .ba-layer { position: absolute; inset: 0; display: grid; place-items: center; }
+    .ba-layer svg { width: min(78%, 720px); height: auto; }
+    .ba-after { clip-path: inset(0 0 0 var(--cut, 50%)); }
+    .ba-divider {
+      position: absolute;
+      top: 0; bottom: 0;
+      left: var(--cut, 50%);
+      width: 3px;
+      background: var(--orange);
+      box-shadow: 0 0 18px rgba(249, 115, 22, 0.8);
+      z-index: 3;
+    }
+    .ba-handle {
+      position: absolute;
+      top: 50%; left: var(--cut, 50%);
+      transform: translate(-50%, -50%);
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: var(--orange);
+      display: grid;
+      place-items: center;
+      color: #0b0b0d;
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.05em;
+      box-shadow: 0 6px 24px rgba(249, 115, 22, 0.55);
+      z-index: 4;
+      pointer-events: none;
+    }
+    .ba-tag {
+      position: absolute;
+      top: 18px;
+      z-index: 2;
+      font-family: var(--cond);
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 7px 14px;
+      border-radius: 4px;
+    }
+    .ba-tag-avant { left: 18px; background: rgba(244, 244, 242, 0.12); color: var(--dim); }
+    .ba-tag-apres { right: 18px; background: var(--orange); color: #0b0b0d; }
+    .ba-caption {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 16px 20px;
+      border-top: 1px solid var(--line);
+      color: var(--dim);
+      font-size: 0.95rem;
+    }
+    .ba-caption b { color: var(--text); }
+
+    /* ===== Services ===== */
+    .section-dark {
+      background: var(--surface);
+    }
+    .spotlight::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(560px circle at var(--sx, 50%) var(--sy, 30%), rgba(249, 115, 22, 0.09), transparent 65%);
+      pointer-events: none;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 20px;
+    }
+    .svc {
+      position: relative;
+      background: var(--surface-2);
+      border: 1px solid rgba(244, 244, 242, 0.07);
+      border-radius: 12px;
+      padding: 30px 26px;
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      z-index: 1;
+    }
+    .svc::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: var(--orange);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .svc:hover { transform: translateY(-6px); border-color: var(--line-strong); box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5); }
+    .svc:hover::before { transform: scaleX(1); }
+    .svc-ico {
+      width: 54px; height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(249, 115, 22, 0.1);
+      border: 1px solid var(--line-strong);
+      color: var(--orange);
+      margin-bottom: 18px;
+      transition: transform 0.3s;
+    }
+    .svc:hover .svc-ico { transform: rotate(-6deg) scale(1.08); }
+    .svc-ico svg { width: 27px; height: 27px; }
+    .svc h3 {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin-bottom: 10px;
+    }
+    .svc p { color: var(--dim); font-size: 0.96rem; margin-bottom: 14px; }
+    .svc ul { list-style: none; }
+    .svc li {
+      position: relative;
+      padding-left: 20px;
+      color: var(--dim);
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+    }
+    .svc li::before { content: "▸"; position: absolute; left: 0; color: var(--orange); }
+    .svc-tag {
+      position: absolute;
+      top: 20px; right: 20px;
+      font-family: var(--cond);
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--orange);
+      border: 1px solid var(--line-strong);
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: rgba(249, 115, 22, 0.07);
+    }
+
+    /* Bandeau dépannage */
+    .sos {
+      margin-top: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+      flex-wrap: wrap;
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      padding: 26px 30px;
+      background:
+        linear-gradient(100deg, rgba(249, 115, 22, 0.16), transparent 55%),
+        var(--surface-2);
+    }
+    .sos-left { display: flex; align-items: center; gap: 18px; }
+    .sos-ico {
+      width: 58px; height: 58px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--orange);
+      color: #0b0b0d;
+      animation: sosPulse 2s infinite;
+    }
+    .sos-ico svg { width: 28px; height: 28px; }
+    @keyframes sosPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.55); }
+      60% { box-shadow: 0 0 0 16px rgba(249, 115, 22, 0); }
+    }
+    .sos h3 { font-family: var(--display); font-weight: 800; font-size: 1.7rem; text-transform: uppercase; }
+    .sos p { color: var(--dim); font-size: 0.95rem; }
+
+    /* ===== Chiffres / tableau de bord ===== */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .dial {
+      text-align: center;
+      border: 1px solid rgba(244, 244, 242, 0.07);
+      border-radius: 12px;
+      background: var(--surface-2);
+      padding: 30px 20px 26px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .dial:hover { border-color: var(--line-strong); transform: translateY(-4px); }
+    .dial-gauge { position: relative; width: 130px; height: 74px; margin: 0 auto 12px; }
+    .dial-gauge svg { width: 100%; height: 100%; overflow: visible; }
+    .dial-track { stroke: rgba(244, 244, 242, 0.1); }
+    .dial-fill {
+      stroke: var(--orange);
+      stroke-dasharray: 188.5;
+      stroke-dashoffset: 188.5;
+      transition: stroke-dashoffset 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+      filter: drop-shadow(0 0 6px rgba(249, 115, 22, 0.6));
+    }
+    .dial.on .dial-fill { stroke-dashoffset: var(--target, 0); }
+    .dial-value {
+      position: absolute;
+      left: 0; right: 0; bottom: -4px;
+      font-family: var(--cond);
+      font-weight: 700;
+      font-size: 1.9rem;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .dial-label {
+      font-family: var(--cond);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-size: 0.92rem;
+      color: var(--dim);
+      margin-top: 10px;
+    }
+
+    /* ===== Process ===== */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+      counter-reset: step;
+    }
+    .step {
+      position: relative;
+      border: 1px solid rgba(244, 244, 242, 0.07);
+      border-radius: 12px;
+      background: var(--surface-2);
+      padding: 28px 24px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .step:hover { border-color: var(--line-strong); transform: translateY(-4px); }
+    .step-num {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 2.6rem;
+      color: transparent;
+      -webkit-text-stroke: 1.5px var(--orange);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .step h3 { font-family: var(--display); font-weight: 700; font-size: 1.35rem; text-transform: uppercase; margin-bottom: 8px; }
+    .step p { color: var(--dim); font-size: 0.93rem; }
+
+    /* ===== Contact ===== */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+    .contact-card {
+      border: 1px solid rgba(244, 244, 242, 0.07);
+      border-radius: 14px;
+      background: var(--surface-2);
+      padding: 36px 32px;
+    }
+    .contact-card h3 {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 1.8rem;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(244, 244, 242, 0.06);
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-ico {
+      width: 40px; height: 40px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: rgba(249, 115, 22, 0.1);
+      border: 1px solid var(--line-strong);
+      color: var(--orange);
+    }
+    .info-ico svg { width: 20px; height: 20px; }
+    .info-row b { display: block; font-size: 0.98rem; }
+    .info-row span, .info-row a { color: var(--dim); font-size: 0.93rem; text-decoration: none; }
+    .info-row a:hover { color: var(--orange); }
+    .hours-table { width: 100%; border-collapse: collapse; font-size: 0.97rem; }
+    .hours-table td { padding: 11px 4px; border-bottom: 1px solid rgba(244, 244, 242, 0.06); color: var(--dim); }
+    .hours-table td:last-child { text-align: right; color: var(--text); font-variant-numeric: tabular-nums; }
+    .hours-table tr.today td { color: var(--orange); font-weight: 600; }
+    .hours-note {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ok);
+      font-size: 0.92rem;
+    }
+    .big-call {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: var(--orange);
+      color: #0b0b0d;
+      text-decoration: none;
+      font-family: var(--cond);
+      font-weight: 700;
+      font-size: 1.5rem;
+      letter-spacing: 0.06em;
+      padding: 18px;
+      border-radius: 10px;
+      box-shadow: 0 8px 30px rgba(249, 115, 22, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .big-call:hover { transform: translateY(-3px); box-shadow: 0 12px 44px rgba(249, 115, 22, 0.6); }
+    .socials { display: flex; gap: 12px; margin-top: 20px; }
+    .social {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid rgba(244, 244, 242, 0.14);
+      border-radius: 8px;
+      padding: 12px;
+      color: var(--dim);
+      text-decoration: none;
+      font-family: var(--cond);
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: border-color 0.25s, color 0.25s, transform 0.25s;
+    }
+    .social:hover { border-color: var(--orange); color: var(--orange); transform: translateY(-2px); }
+
+    /* ===== Footer ===== */
+    .footer {
+      border-top: 1px solid rgba(244, 244, 242, 0.07);
+      padding: 40px 0 90px;
+      text-align: center;
+      background: #08080a;
+    }
+    .footer .brand-top { font-size: 1.6rem; }
+    .footer p { color: var(--dim); font-size: 0.9rem; margin-top: 8px; }
+    .footer .demo-note {
+      display: inline-block;
+      margin-top: 18px;
+      font-family: var(--cond);
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(249, 115, 22, 0.75);
+      border: 1px dashed var(--line-strong);
+      border-radius: 6px;
+      padding: 8px 16px;
+    }
+
+    /* ===== Barre d'appel mobile ===== */
+    .call-bar {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      z-index: 90;
+      display: none;
+      background: var(--orange);
+      color: #0b0b0d;
+      text-decoration: none;
+      text-align: center;
+      font-family: var(--cond);
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: 0.06em;
+      padding: 15px;
+      box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ===== Reveal ===== */
+    .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .services-grid .svc:nth-child(2), .steps .step:nth-child(2), .dash-grid .dial:nth-child(2) { transition-delay: 0.1s; }
+    .services-grid .svc:nth-child(3), .steps .step:nth-child(3), .dash-grid .dial:nth-child(3) { transition-delay: 0.2s; }
+    .services-grid .svc:nth-child(4), .steps .step:nth-child(4), .dash-grid .dial:nth-child(4) { transition-delay: 0.3s; }
+    .services-grid .svc:nth-child(5) { transition-delay: 0.4s; }
+    .services-grid .svc:nth-child(6) { transition-delay: 0.5s; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 900px) {
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 760px) {
+      .nav-links {
+        position: fixed;
+        top: 62px; left: 0; right: 0;
+        flex-direction: column;
+        gap: 0;
+        background: rgba(11, 11, 13, 0.98);
+        border-bottom: 1px solid var(--line);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+      .nav-links.open { max-height: 320px; }
+      .nav-links a { padding: 16px 22px; border-top: 1px solid rgba(244, 244, 242, 0.06); }
+      .nav-links a::after { display: none; }
+      .nav-phone { display: none; }
+      .burger {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-left: auto;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 6px;
+      }
+      .burger span { width: 25px; height: 2px; background: var(--orange); transition: transform 0.3s, opacity 0.3s; }
+      .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      .burger.open span:nth-child(2) { opacity: 0; }
+      .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+      .section { padding: 68px 0; }
+      .call-bar { display: block; }
+      .spray-hint { display: none; }
+      .ba-stage { aspect-ratio: 16 / 10; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#accueil" class="brand">
+        <span class="brand-top">Carrosserie</span>
+        <span class="brand-bottom">Lomrye</span>
+        <span class="brand-stars">★ ★ ★ ★ ★</span>
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="#services">Services</a>
+        <a href="#avant-apres">Avant / Après</a>
+        <a href="#process">Prise en charge</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a href="tel:0629124335" class="nav-phone">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        06 29 12 43 35
+      </a>
+      <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="accueil">
+    <canvas id="sprayCanvas"></canvas>
+    <div class="container">
+      <div class="hero-eyebrow reveal"><span class="open-dot"></span> Champforgeuil (71) · Toutes marques · Toutes assurances</div>
+      <h1 class="reveal">
+        Un choc,<br>
+        <span class="stroke">une bosse&nbsp;?</span><br>
+        <span class="orange">On s'occupe de vous.</span>
+      </h1>
+      <p class="hero-sub reveal">
+        Carrosserie, peinture, débosselage, bris de glace et mécanique —
+        <strong>toutes marques, toutes assurances</strong>. Véhicule de courtoisie,
+        franchise offerte* et <strong>0&nbsp;€ d'avance de frais</strong> :
+        vous repartez l'esprit tranquille.
+      </p>
+      <div class="hero-ctas reveal">
+        <a href="tel:0629124335" class="btn btn-orange">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          Dépannage 24h/24
+        </a>
+        <a href="#contact" class="btn btn-line">Demander un devis</a>
+      </div>
+      <div class="hero-badges reveal">
+        <div class="hero-badge">
+          <span class="badge-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span>
+          <span><b>Véhicule de courtoisie</b><br>offert pendant les travaux</span>
+        </div>
+        <div class="hero-badge">
+          <span class="badge-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg></span>
+          <span><b>Franchise offerte*</b><br>jusqu'à 500&nbsp;€ pour vous</span>
+        </div>
+        <div class="hero-badge">
+          <span class="badge-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg></span>
+          <span><b>0&nbsp;€ d'avance de frais</b><br>on gère votre assurance</span>
+        </div>
+      </div>
+    </div>
+    <div class="spray-hint"><span class="dot"></span> Bougez la souris : pistolet à peinture</div>
+  </section>
+
+  <div class="hazard"></div>
+
+  <!-- MARQUEE -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marqueeTrack">
+      <span>Carrosserie</span><i>◆</i>
+      <span>Peinture</span><i>◆</i>
+      <span>Débosselage</span><i>◆</i>
+      <span>Bris de glace</span><i>◆</i>
+      <span>Mécanique</span><i>◆</i>
+      <span>Pneus sans rendez-vous</span><i>◆</i>
+      <span>Dépannage 24h/24</span><i>◆</i>
+      <span>Toutes assurances</span><i>◆</i>
+    </div>
+  </div>
+
+  <!-- AVANT / APRÈS -->
+  <section class="section" id="avant-apres">
+    <div class="container">
+      <div class="sec-head reveal">
+        <span class="sec-eyebrow">// La preuve par l'image</span>
+        <h2>Faites glisser : <span style="color: var(--orange)">avant / après</span></h2>
+        <p>Débosselage, redressage et peinture en cabine : votre voiture ressort comme neuve. Déplacez le curseur pour voir la différence.</p>
+      </div>
+      <div class="ba-wrap reveal" id="baWrap">
+        <div class="ba-stage">
+          <span class="ba-tag ba-tag-avant">Avant</span>
+          <span class="ba-tag ba-tag-apres">Après</span>
+          <!-- AVANT : carrosserie accidentée -->
+          <div class="ba-layer ba-before">
+            <svg viewBox="0 0 720 300" aria-hidden="true">
+              <ellipse cx="360" cy="262" rx="290" ry="16" fill="rgba(0,0,0,0.5)"/>
+              <path d="M96 218 C96 190 120 178 150 172 L200 118 C214 100 238 88 268 86 L430 84 C470 84 506 100 534 128 L570 166 C606 172 632 186 632 214 L630 236 C630 246 622 252 612 252 L118 252 C106 252 96 244 96 232 Z"
+                    fill="#4a4a50" stroke="#2c2c31" stroke-width="3"/>
+              <path d="M225 122 C238 106 258 98 276 97 L340 96 L338 160 L212 160 Z" fill="#26262c" stroke="#3c3c42" stroke-width="2"/>
+              <path d="M362 96 L470 95 C496 98 518 112 536 132 L556 158 L360 160 Z" fill="#26262c" stroke="#3c3c42" stroke-width="2"/>
+              <path d="M368 100 L420 99 L500 152 L370 153 Z" fill="rgba(120,120,130,0.14)"/>
+              <!-- fissure pare-brise -->
+              <path d="M470 108 l14 12 m-14-12 l-4 16 m4-16 l16 3 m-16-3 l-12-6" stroke="#8a8a92" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <!-- bosses -->
+              <ellipse cx="180" cy="205" rx="26" ry="14" fill="#37373d"/>
+              <ellipse cx="176" cy="201" rx="14" ry="7" fill="#2b2b31"/>
+              <ellipse cx="555" cy="196" rx="22" ry="12" fill="#37373d"/>
+              <ellipse cx="551" cy="193" rx="11" ry="6" fill="#2b2b31"/>
+              <!-- rayures -->
+              <path d="M300 208 l70 6 M310 218 l50 5" stroke="#2b2b31" stroke-width="3" stroke-linecap="round"/>
+              <path d="M420 200 l58 8" stroke="#2b2b31" stroke-width="4" stroke-linecap="round"/>
+              <!-- phare cassé -->
+              <path d="M612 208 c12 2 16 10 15 20 l-22 2 Z" fill="#3c3c42"/>
+              <!-- roues -->
+              <g>
+                <circle cx="210" cy="242" r="40" fill="#141418" stroke="#2c2c31" stroke-width="4"/>
+                <circle cx="210" cy="242" r="20" fill="#26262c"/>
+                <circle cx="210" cy="242" r="6" fill="#3c3c42"/>
+              </g>
+              <g>
+                <circle cx="520" cy="242" r="40" fill="#141418" stroke="#2c2c31" stroke-width="4"/>
+                <circle cx="520" cy="242" r="20" fill="#26262c"/>
+                <circle cx="520" cy="242" r="6" fill="#3c3c42"/>
+              </g>
+            </svg>
+          </div>
+          <!-- APRÈS : carrosserie réparée, brillante -->
+          <div class="ba-layer ba-after">
+            <svg viewBox="0 0 720 300" aria-hidden="true">
+              <defs>
+                <linearGradient id="paint" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#fb923c"/>
+                  <stop offset="0.45" stop-color="#f97316"/>
+                  <stop offset="1" stop-color="#c2570e"/>
+                </linearGradient>
+                <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="rgba(255,255,255,0)"/>
+                  <stop offset="0.5" stop-color="rgba(255,255,255,0.5)"/>
+                  <stop offset="1" stop-color="rgba(255,255,255,0)"/>
+                </linearGradient>
+              </defs>
+              <ellipse cx="360" cy="262" rx="290" ry="16" fill="rgba(0,0,0,0.5)"/>
+              <path d="M96 218 C96 190 120 178 150 172 L200 118 C214 100 238 88 268 86 L430 84 C470 84 506 100 534 128 L570 166 C606 172 632 186 632 214 L630 236 C630 246 622 252 612 252 L118 252 C106 252 96 244 96 232 Z"
+                    fill="url(#paint)" stroke="#a34a0c" stroke-width="3"/>
+              <path d="M225 122 C238 106 258 98 276 97 L340 96 L338 160 L212 160 Z" fill="#1c2733" stroke="#39444f" stroke-width="2"/>
+              <path d="M362 96 L470 95 C496 98 518 112 536 132 L556 158 L360 160 Z" fill="#1c2733" stroke="#39444f" stroke-width="2"/>
+              <path d="M368 100 L420 99 L500 152 L370 153 Z" fill="rgba(190,220,245,0.2)"/>
+              <!-- reflet brillant -->
+              <path d="M140 180 C220 168 480 166 596 182 L590 172 C500 158 230 160 152 174 Z" fill="url(#shine)" opacity="0.7"/>
+              <rect x="128" y="186" width="470" height="5" rx="2.5" fill="rgba(255,255,255,0.28)"/>
+              <!-- phare neuf -->
+              <path d="M612 208 c12 2 16 10 15 20 l-22 2 Z" fill="#ffe9b8"/>
+              <path d="M630 214 l34 -8 M632 224 l36 0 M630 232 l34 8" stroke="rgba(255,233,184,0.35)" stroke-width="3" stroke-linecap="round"/>
+              <!-- roues -->
+              <g>
+                <circle cx="210" cy="242" r="40" fill="#141418" stroke="#3c3c42" stroke-width="4"/>
+                <circle cx="210" cy="242" r="20" fill="#2b2b31"/>
+                <g stroke="#8a8a92" stroke-width="3">
+                  <path d="M210 226 v32 M194 242 h32 M199 231 l22 22 M221 231 l-22 22"/>
+                </g>
+                <circle cx="210" cy="242" r="6" fill="#f97316"/>
+              </g>
+              <g>
+                <circle cx="520" cy="242" r="40" fill="#141418" stroke="#3c3c42" stroke-width="4"/>
+                <circle cx="520" cy="242" r="20" fill="#2b2b31"/>
+                <g stroke="#8a8a92" stroke-width="3">
+                  <path d="M520 226 v32 M504 242 h32 M509 231 l22 22 M531 231 l-22 22"/>
+                </g>
+                <circle cx="520" cy="242" r="6" fill="#f97316"/>
+              </g>
+            </svg>
+          </div>
+          <div class="ba-divider"></div>
+          <div class="ba-handle">⇄</div>
+        </div>
+        <div class="ba-caption">
+          <span><b>Débosselage + peinture cabine</b> — teinte constructeur au spectromètre</span>
+          <span>Remplacez ces illustrations par de vraies photos de vos réparations</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section section-dark spotlight" id="services">
+    <div class="container">
+      <div class="sec-head reveal">
+        <span class="sec-eyebrow">// Nos services</span>
+        <h2>Carrosserie <span style="color: var(--orange)">&amp; mécanique</span>, tout sous un même toit</h2>
+        <p>Le garage s'agrandit : en plus de la carrosserie, Lomrye entretient et répare votre véhicule, toutes marques.</p>
+      </div>
+      <div class="services-grid">
+        <article class="svc reveal">
+          <div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></div>
+          <h3>Carrosserie</h3>
+          <p>Remise en état complète après accident ou accrochage : redressage, remplacement d'éléments, ajustage.</p>
+          <ul>
+            <li>Toutes marques, toutes assurances</li>
+            <li>Passage au marbre &amp; redressage</li>
+            <li>Expertise directement sur place</li>
+          </ul>
+        </article>
+        <article class="svc reveal">
+          <div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0Z"/><path d="m5 2 5 5"/><path d="M2 13h15"/><path d="M22 20a2 2 0 1 1-4 0c0-1.6 1.7-2.4 2-4 .3 1.6 2 2.4 2 4Z"/></svg></div>
+          <h3>Peinture</h3>
+          <p>Cabine de peinture professionnelle et teinte constructeur reproduite au spectromètre : raccord invisible.</p>
+          <ul>
+            <li>Teinte exacte garantie</li>
+            <li>Vernis anti-UV longue durée</li>
+            <li>Finition brillance d'origine</li>
+          </ul>
+        </article>
+        <article class="svc reveal">
+          <div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M15 12c0 1.7-1.3 3-3 3s-3-1.3-3-3 1.3-3 3-3 3 1.3 3 3Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></div>
+          <h3>Débosselage</h3>
+          <p>Grêle, coup de portière, petit choc : débosselage sans peinture quand c'est possible — plus rapide, moins cher.</p>
+          <ul>
+            <li>Sans peinture (DSP) si possible</li>
+            <li>Intervention rapide</li>
+            <li>Devis immédiat sur place</li>
+          </ul>
+        </article>
+        <article class="svc reveal">
+          <span class="svc-tag">Jusqu'à 500 € pour vous*</span>
+          <div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="m2 10 7 4 4-6 9 7"/></svg></div>
+          <h3>Pare-brise &amp; bris de glace</h3>
+          <p>Impact ou pare-brise fissuré ? Remplacement toutes marques avec <strong style="color:var(--text)">franchise offerte</strong> et 0&nbsp;€ d'avance de frais.</p>
+          <ul>
+            <li>Franchise offerte*</li>
+            <li>Rachat &amp; recyclage de votre pare-brise</li>
+            <li>Recalibrage caméras ADAS</li>
+          </ul>
+        </article>
+        <article class="svc reveal">
+          <span class="svc-tag">Nouveau</span>
+          <div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+          <h3>Mécanique &amp; entretien</h3>
+          <p>Le garage s'agrandit ! Entretien complet et grosses interventions mécaniques, toutes marques.</p>
+          <ul>
+            <li>Vidange, freinage, amortisseurs</li>
+            <li>Distribution, embrayage, boîte auto</li>
+            <li>Diagnostic électronique</li>
+          </ul>
+        </article>
+        <article class="svc reveal">
+          <span class="svc-tag">Sans rendez-vous</span>
+          <div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.9 4.9l2.9 2.9M16.2 16.2l2.9 2.9M4.9 19.1l2.9-2.9M16.2 7.8l2.9-2.9"/></svg></div>
+          <h3>Pneus</h3>
+          <p>Changement de pneus <strong style="color:var(--text)">sans rendez-vous</strong> : vous passez, on monte, vous repartez.</p>
+          <ul>
+            <li>Montage &amp; équilibrage</li>
+            <li>Parallélisme &amp; géométrie</li>
+            <li>Toutes dimensions, tous budgets</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="sos reveal">
+        <div class="sos-left">
+          <div class="sos-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <div>
+            <h3>Dépannage 24h/24 — 7j/7</h3>
+            <p>En panne ou accidenté, de jour comme de nuit : on vient vous chercher.</p>
+          </div>
+        </div>
+        <a href="tel:0629124335" class="btn btn-orange">06 29 12 43 35</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="hazard"></div>
+
+  <!-- CHIFFRES -->
+  <section class="section">
+    <div class="container">
+      <div class="sec-head reveal">
+        <span class="sec-eyebrow">// Tout est inclus</span>
+        <h2>Vos avantages, <span style="color: var(--orange)">compteur à fond</span></h2>
+      </div>
+      <div class="dash-grid">
+        <div class="dial reveal" data-target="0" data-suffix=" €" data-fill="1">
+          <div class="dial-gauge">
+            <svg viewBox="0 0 130 74">
+              <path class="dial-track" d="M10 68 A55 55 0 0 1 120 68" fill="none" stroke-width="9" stroke-linecap="round"/>
+              <path class="dial-fill" d="M10 68 A55 55 0 0 1 120 68" fill="none" stroke-width="9" stroke-linecap="round"/>
+            </svg>
+            <div class="dial-value">0 €</div>
+          </div>
+          <div class="dial-label">D'avance de frais</div>
+        </div>
+        <div class="dial reveal" data-target="500" data-suffix=" €" data-fill="0.82">
+          <div class="dial-gauge">
+            <svg viewBox="0 0 130 74">
+              <path class="dial-track" d="M10 68 A55 55 0 0 1 120 68" fill="none" stroke-width="9" stroke-linecap="round"/>
+              <path class="dial-fill" d="M10 68 A55 55 0 0 1 120 68" fill="none" stroke-width="9" stroke-linecap="round"/>
+            </svg>
+            <div class="dial-value">0 €</div>
+          </div>
+          <div class="dial-label">Jusqu'à 500 € pour vous*</div>
+        </div>
+        <div class="dial reveal" data-target="24" data-suffix="h/24" data-fill="1">
+          <div class="dial-gauge">
+            <svg viewBox="0 0 130 74">
+              <path class="dial-track" d="M10 68 A55 55 0 0 1 120 68" fill="none" stroke-width="9" stroke-linecap="round"/>
+              <path class="dial-fill" d="M10 68 A55 55 0 0 1 120 68" fill="none" stroke-width="9" stroke-linecap="round"/>
+            </svg>
+            <div class="dial-value">0</div>
+          </div>
+          <div class="dial-label">Dépannage jour &amp; nuit</div>
+        </div>
+        <div class="dial reveal" data-target="100" data-suffix=" %" data-fill="1">
+          <div class="dial-gauge">
+            <svg viewBox="0 0 130 74">
+              <path class="dial-track" d="M10 68 A55 55 0 0 1 120 68" fill="none" stroke-width="9" stroke-linecap="round"/>
+              <path class="dial-fill" d="M10 68 A55 55 0 0 1 120 68" fill="none" stroke-width="9" stroke-linecap="round"/>
+            </svg>
+            <div class="dial-value">0 %</div>
+          </div>
+          <div class="dial-label">Toutes assurances acceptées</div>
+        </div>
+      </div>
+      <p class="reveal" style="color: var(--dim); font-size: 0.85rem; margin-top: 18px;">* Selon conditions, sur remplacement de pare-brise pris en charge par votre assurance. Véhicule de courtoisie offert pendant les travaux.</p>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section section-dark spotlight" id="process">
+    <div class="container">
+      <div class="sec-head reveal">
+        <span class="sec-eyebrow">// Comment ça se passe</span>
+        <h2>Prise en charge <span style="color: var(--orange)">en 4 temps</span></h2>
+        <p>Un sinistre, c'est déjà assez de stress : chez Lomrye, tout est carré du premier appel à la restitution.</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-num">01</div>
+          <h3>Vous appelez</h3>
+          <p>Décrivez le sinistre ou passez au garage : devis et photos immédiats, sans engagement.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">02</div>
+          <h3>On gère l'assurance</h3>
+          <p>Déclaration, expertise, prise en charge : on s'occupe de toute la paperasse avec votre assureur. 0&nbsp;€ d'avance.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">03</div>
+          <h3>On répare</h3>
+          <p>Pendant les travaux, vous roulez avec le véhicule de courtoisie offert. Suivi par téléphone à chaque étape.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">04</div>
+          <h3>Vous récupérez</h3>
+          <p>Véhicule contrôlé, lavé et restitué comme neuf. Garantie sur les réparations effectuées.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="hazard"></div>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="sec-head reveal">
+        <span class="sec-eyebrow">// Contact &amp; accès</span>
+        <h2>Passez nous voir <span style="color: var(--orange)">ou appelez</span></h2>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-card reveal">
+          <h3>Le garage</h3>
+          <div class="info-row">
+            <span class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></span>
+            <span><b>28 route de Demigny</b><span>71530 Champforgeuil</span><br>
+            <a href="https://www.google.com/maps/search/?api=1&query=Carrosserie+Lomrye+28+route+de+Demigny+71530+Champforgeuil" target="_blank" rel="noopener">→ Ouvrir dans Google Maps</a></span>
+          </div>
+          <div class="info-row">
+            <span class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+            <span><b>06 29 12 43 35</b><span>Dépannage 24h/24 — 7j/7</span></span>
+          </div>
+          <div class="info-row">
+            <span class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+            <span><b>E-mail</b><a href="mailto:carrosserielomrye@gmail.com">carrosserielomrye@gmail.com</a></span>
+          </div>
+          <div class="socials">
+            <a class="social" href="#" aria-label="Facebook">Facebook</a>
+            <a class="social" href="#" aria-label="Instagram">Instagram</a>
+            <a class="social" href="#" aria-label="Snapchat">Snap : carosserie_71</a>
+          </div>
+        </div>
+        <div class="contact-card reveal">
+          <h3>Horaires</h3>
+          <table class="hours-table">
+            <tr><td>Lundi — Vendredi</td><td>8h30 – 12h00 · 14h00 – 18h00</td></tr>
+            <tr><td>Samedi</td><td>Sur rendez-vous</td></tr>
+            <tr><td>Dimanche</td><td>Fermé</td></tr>
+            <tr class="today"><td>Dépannage</td><td>24h/24 — 7j/7</td></tr>
+          </table>
+          <div class="hours-note"><span class="open-dot"></span> Pneus sans rendez-vous aux heures d'ouverture</div>
+          <a href="tel:0629124335" class="big-call">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            06 29 12 43 35
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <span class="brand-top">Carrosserie Lomrye</span>
+      <p>Carrosserie · Peinture · Mécanique — 28 route de Demigny, 71530 Champforgeuil</p>
+      <p>© <span id="year"></span> Carrosserie Lomrye — Tous droits réservés.</p>
+      <span class="demo-note">Maquette réalisée par SCIA — proposition commerciale</span>
+    </div>
+  </footer>
+
+  <a href="tel:0629124335" class="call-bar">📞 Dépannage 24h/24 — 06 29 12 43 35</a>
+
+  <script>
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Nav
+    const nav = document.getElementById("nav");
+    window.addEventListener("scroll", () => {
+      nav.classList.toggle("scrolled", window.scrollY > 24);
+    }, { passive: true });
+    const burger = document.getElementById("burger");
+    const navLinks = document.getElementById("navLinks");
+    burger.addEventListener("click", () => {
+      burger.classList.toggle("open");
+      navLinks.classList.toggle("open");
+    });
+    navLinks.querySelectorAll("a").forEach((a) =>
+      a.addEventListener("click", () => {
+        burger.classList.remove("open");
+        navLinks.classList.remove("open");
+      })
+    );
+
+    // Marquee sans couture
+    const track = document.getElementById("marqueeTrack");
+    track.innerHTML += track.innerHTML;
+
+    // Reveal
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("visible");
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
+
+    // ===== Pistolet à peinture (hero) =====
+    const canvas = document.getElementById("sprayCanvas");
+    const ctx = canvas.getContext("2d");
+    const hero = document.querySelector(".hero");
+    let hw, hh;
+    function sizeSpray() {
+      hw = canvas.width = hero.offsetWidth;
+      hh = canvas.height = hero.offsetHeight;
+    }
+    window.addEventListener("resize", sizeSpray);
+    sizeSpray();
+    const drops = [];
+    function spray(x, y, power) {
+      const n = Math.round(6 * power);
+      for (let i = 0; i < n; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const dist = Math.random() * 34 * power;
+        drops.push({
+          x: x + Math.cos(angle) * dist,
+          y: y + Math.sin(angle) * dist,
+          r: Math.random() * 4.5 + 1,
+          a: 0.55,
+          vy: Math.random() * 0.25,
+        });
+      }
+      if (drops.length > 900) drops.splice(0, drops.length - 900);
+    }
+    let lastX = null, lastY = null;
+    hero.addEventListener("pointermove", (e) => {
+      if (reducedMotion) return;
+      const rect = hero.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const speed = lastX === null ? 1 : Math.min(Math.hypot(x - lastX, y - lastY) / 14, 2.2);
+      spray(x, y, 0.7 + speed);
+      lastX = x; lastY = y;
+    }, { passive: true });
+    function renderSpray() {
+      ctx.clearRect(0, 0, hw, hh);
+      for (let i = drops.length - 1; i >= 0; i--) {
+        const d = drops[i];
+        d.a -= 0.004;
+        d.y += d.vy;
+        if (d.a <= 0) { drops.splice(i, 1); continue; }
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(249, 115, 22, ${d.a})`;
+        ctx.fill();
+      }
+      requestAnimationFrame(renderSpray);
+    }
+    if (!reducedMotion) renderSpray();
+
+    // ===== Comparateur avant / après =====
+    const baWrap = document.getElementById("baWrap");
+    function setCut(clientX) {
+      const rect = baWrap.getBoundingClientRect();
+      let pct = ((clientX - rect.left) / rect.width) * 100;
+      pct = Math.max(2, Math.min(98, pct));
+      baWrap.style.setProperty("--cut", pct + "%");
+    }
+    let dragging = false;
+    baWrap.addEventListener("pointerdown", (e) => { dragging = true; setCut(e.clientX); baWrap.setPointerCapture(e.pointerId); });
+    baWrap.addEventListener("pointermove", (e) => { if (dragging) setCut(e.clientX); });
+    baWrap.addEventListener("pointerup", () => { dragging = false; });
+    baWrap.addEventListener("pointercancel", () => { dragging = false; });
+    // petit va-et-vient de démonstration à l'apparition
+    const baObs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting || reducedMotion) return;
+        baObs.unobserve(e.target);
+        let t = 0;
+        const demo = setInterval(() => {
+          t += 0.035;
+          if (t >= Math.PI * 2 || dragging) { clearInterval(demo); return; }
+          const pct = 50 + Math.sin(t) * 26;
+          baWrap.style.setProperty("--cut", pct + "%");
+        }, 16);
+      });
+    }, { threshold: 0.5 });
+    baObs.observe(baWrap);
+
+    // ===== Spotlight (phare) =====
+    document.querySelectorAll(".spotlight").forEach((sec) => {
+      sec.addEventListener("pointermove", (e) => {
+        const rect = sec.getBoundingClientRect();
+        sec.style.setProperty("--sx", (e.clientX - rect.left) + "px");
+        sec.style.setProperty("--sy", (e.clientY - rect.top) + "px");
+      }, { passive: true });
+    });
+
+    // ===== Compteurs tableau de bord =====
+    const CIRC = 188.5;
+    const dialObs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        dialObs.unobserve(e.target);
+        const dial = e.target;
+        const target = parseInt(dial.dataset.target, 10);
+        const suffix = dial.dataset.suffix || "";
+        const fill = parseFloat(dial.dataset.fill);
+        dial.style.setProperty("--target", CIRC * (1 - fill));
+        dial.classList.add("on");
+        const valueEl = dial.querySelector(".dial-value");
+        const start = performance.now();
+        const dur = 1400;
+        const tick = (now) => {
+          const p = Math.min((now - start) / dur, 1);
+          valueEl.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll(".dial").forEach((d) => dialObs.observe(d));
+  </script>
+</body>
+</html>
