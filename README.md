@@ -15,7 +15,7 @@ Site web officiel de l'agence SCIA.
 
 - `index.html` — page principale (une seule page, sections Accueil / Services / Méthode / Contact)
 - `styles.css` — styles (thème sombre ultra-tech, responsive)
-- `script.js` — animations (particules, machine à écrire, compteurs, apparitions au scroll)
+- `script.js` — animations interactives (curseur personnalisé, particules réactives à la souris, cartes 3D inclinables, boutons magnétiques, orbe IA en parallaxe, préloader, machine à écrire, compteurs, terminal animé, apparitions au scroll)
 
 ## Lancer le site en local
 
