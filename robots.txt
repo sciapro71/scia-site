@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /demos/
 
 Sitemap: https://sciapro71.github.io/scia-site/sitemap.xml

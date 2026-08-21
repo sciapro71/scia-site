@@ -17,7 +17,6 @@ Déployé par GitHub Pages depuis la branche `main` (dossier racine).
 | `script.js` | Moteur 3D signature, interactions, onglets cas d'usage, formulaire |
 | `og-image.png` | Image de partage (réseaux sociaux) |
 | `robots.txt` / `sitemap.xml` | Référencement |
-| `demos/` | Maquettes commerciales pour les prospects (non indexées) |
 
 ## Publier une modification
 
