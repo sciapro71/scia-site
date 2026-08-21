@@ -161,29 +161,140 @@
   });
 
   /* ========================================================
-     MÉTHODE — rail lié au scroll
+     MÉTHODE — pipeline lié au scroll
+     (horizontal sur ordinateur, vertical sur mobile)
      ======================================================== */
-  const methodeWrap = $("#methodeWrap");
-  const methodeFill = $("#methodeFill");
-  const msteps = Array.from(document.querySelectorAll(".mstep"));
-  function majMethode() {
-    const r = methodeWrap.getBoundingClientRect();
-    const progress = clamp((window.innerHeight * 0.62 - r.top) / r.height, 0, 1);
-    methodeFill.style.height = (progress * 100).toFixed(1) + "%";
-    const rempli = progress * r.height;
-    msteps.forEach((s) => s.classList.toggle("actif", s.offsetTop + 34 <= rempli));
+  const pipeline = $("#pipeline");
+  const pipeFill = $("#pipeFill");
+  const psteps = Array.from(document.querySelectorAll(".pstep"));
+  function majPipeline() {
+    const r = pipeline.getBoundingClientRect();
+    const progress = clamp((window.innerHeight * 0.7 - r.top) / (r.height * 0.95), 0, 1);
+    if (narrowQuery.matches) {
+      pipeFill.style.width = "100%";
+      pipeFill.style.height = (progress * 100).toFixed(1) + "%";
+    } else {
+      pipeFill.style.height = "100%";
+      pipeFill.style.width = (progress * 100).toFixed(1) + "%";
+    }
+    psteps.forEach((s, i) => s.classList.toggle("actif", progress >= (i + 0.55) / psteps.length));
   }
   if (reducedMotion) {
-    methodeFill.style.height = "100%";
-    msteps.forEach((s) => s.classList.add("actif"));
+    pipeFill.style.width = "100%";
+    pipeFill.style.height = "100%";
+    psteps.forEach((s) => s.classList.add("actif"));
   } else {
     let tick = false;
     window.addEventListener("scroll", () => {
       if (tick) return;
       tick = true;
-      requestAnimationFrame(() => { majMethode(); tick = false; });
+      requestAnimationFrame(() => { majPipeline(); tick = false; });
     }, { passive: true });
-    majMethode();
+    window.addEventListener("resize", majPipeline);
+    majPipeline();
+  }
+
+  /* ========================================================
+     COMPARATEUR AVANT / AVEC SCIA
+     ======================================================== */
+  const ba = $("#baCompare");
+  if (ba) {
+    let dragging = false;
+    const setCut = (pct) => {
+      pct = clamp(pct, 2, 98);
+      ba.style.setProperty("--cut", pct + "%");
+      ba.setAttribute("aria-valuenow", Math.round(pct));
+    };
+    const fromEvent = (e) => {
+      const r = ba.getBoundingClientRect();
+      setCut(((e.clientX - r.left) / r.width) * 100);
+    };
+    ba.addEventListener("pointerdown", (e) => { dragging = true; ba.setPointerCapture(e.pointerId); fromEvent(e); });
+    ba.addEventListener("pointermove", (e) => { if (dragging) fromEvent(e); });
+    ba.addEventListener("pointerup", () => { dragging = false; });
+    ba.addEventListener("pointercancel", () => { dragging = false; });
+    ba.addEventListener("keydown", (e) => {
+      const cur = parseFloat(ba.getAttribute("aria-valuenow"));
+      if (e.key === "ArrowLeft" || e.key === "ArrowDown") { setCut(cur - 5); e.preventDefault(); }
+      if (e.key === "ArrowRight" || e.key === "ArrowUp") { setCut(cur + 5); e.preventDefault(); }
+      if (e.key === "Home") { setCut(2); e.preventDefault(); }
+      if (e.key === "End") { setCut(98); e.preventDefault(); }
+    });
+    if (!reducedMotion) {
+      const baObs = new IntersectionObserver((entries) => {
+        entries.forEach((en) => {
+          if (!en.isIntersecting) return;
+          baObs.unobserve(en.target);
+          let t = 0;
+          const demo = setInterval(() => {
+            t += 0.028;
+            if (t >= Math.PI * 2 || dragging) { clearInterval(demo); return; }
+            setCut(50 + Math.sin(t) * 26);
+          }, 16);
+        });
+      }, { threshold: 0.5 });
+      baObs.observe(ba);
+    }
+  }
+
+  /* ========================================================
+     MOTIF CIRCUIT SUR LES CARTES EXPERTISES
+     ======================================================== */
+  document.querySelectorAll(".xp").forEach((xp) => {
+    const deco = document.createElement("span");
+    deco.className = "xp-circuit";
+    deco.setAttribute("aria-hidden", "true");
+    deco.innerHTML =
+      '<svg viewBox="0 0 90 60" fill="none" stroke="currentColor" stroke-width="1.6">' +
+      '<path d="M88 30 h-24 v-16 h-20 M64 30 v14 h-18"/>' +
+      '<circle cx="40" cy="14" r="3.2"/><circle cx="42" cy="44" r="3.2"/><circle cx="88" cy="30" r="2.2" fill="currentColor" stroke="none"/></svg>';
+    xp.appendChild(deco);
+  });
+
+  /* ========================================================
+     HALO DE L'EMBLÈME CTA
+     ======================================================== */
+  const embleme = $("#ctaEmbleme");
+  if (embleme && finePointer && !reducedMotion) {
+    window.addEventListener("pointermove", (e) => {
+      const r = embleme.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > window.innerHeight) return;
+      const dx = clamp(e.clientX - (r.left + r.width / 2), -80, 80);
+      const dy = clamp(e.clientY - (r.top + r.height / 2), -80, 80);
+      embleme.style.setProperty("--hx", dx * 0.5 + "px");
+      embleme.style.setProperty("--hy", dy * 0.5 + "px");
+    }, { passive: true });
+  }
+
+  /* ========================================================
+     PLAQUE 3D — inclinaison au curseur / au toucher
+     ======================================================== */
+  const plaque = $("#plaque3d");
+  const heroEl = $(".hero");
+  if (plaque && !reducedMotion) {
+    let idleTimer = null;
+    const incline = (nx, ny) => {
+      plaque.classList.add("pilote");
+      plaque.style.transform =
+        "rotateX(" + (6 - ny * 7).toFixed(2) + "deg) rotateY(" + (-9 + nx * 11).toFixed(2) + "deg)";
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        plaque.classList.remove("pilote");
+        plaque.style.transform = "";
+      }, 2200);
+    };
+    if (finePointer) {
+      window.addEventListener("pointermove", (e) => {
+        if (heroEl.getBoundingClientRect().bottom < 0) return;
+        incline((e.clientX / window.innerWidth) * 2 - 1, (e.clientY / window.innerHeight) * 2 - 1);
+      }, { passive: true });
+    } else {
+      window.addEventListener("touchmove", (e) => {
+        const t = e.touches[0];
+        if (!t || heroEl.getBoundingClientRect().bottom < 0) return;
+        incline((t.clientX / window.innerWidth) * 2 - 1, (t.clientY / window.innerHeight) * 2 - 1);
+      }, { passive: true });
+    }
   }
 
   /* ========================================================
@@ -376,84 +487,99 @@
     }
   });
 
-  /* ========================================================
-     MOTEUR OPÉRATIONNEL SCIA — scène 3D signature
-     Chaos (bleu froid) → capture par les nœuds-outils →
-     traversée du noyau (or) → trajectoire ascendante (croissance).
-     ======================================================== */
-  const canvas = $("#engineCanvas");
-  const hero = $(".hero");
-  const ctx = canvas.getContext && canvas.getContext("2d");
 
-  if (ctx) {
+  /* ========================================================
+     MOTEUR D'AUTOMATISATION SCIA — scène 3D signature
+     La plaque-logo (DOM 3D) est le noyau. Deux canvas
+     l'encadrent : les anneaux, nœuds et flux passent
+     réellement DEVANT et DERRIÈRE l'emblème.
+     Chaos (bleu froid) → connexion aux nœuds-outils →
+     traversée de la plaque SCIA → trajectoire ascendante.
+     ======================================================== */
+  const canvasB = $("#engineCanvas");
+  const canvasF = $("#engineCanvasFront");
+  const plaqueZone = $("#plaqueZone");
+  const hero = $(".hero");
+  const ctxB = canvasB.getContext && canvasB.getContext("2d");
+  const ctxF = canvasF.getContext && canvasF.getContext("2d");
+
+  if (ctxB && ctxF) {
     const mobile = narrowQuery.matches;
     const DPR = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2);
     const T_OFFSET = parseFloat(new URLSearchParams(location.search).get("vt")) || 0;
-
-    /* ----- géométrie ----- */
     const CYCLE = 9000;
-    const N_FLUX = mobile ? 70 : 150;
-    const N_CORE = mobile ? 150 : 260;
+    const N_FLUX = mobile ? 60 : 130;
 
-    // noyau : sphère de Fibonacci
-    const corePts = [];
-    for (let i = 0; i < N_CORE; i++) {
-      const k = i + 0.5;
-      const phi = Math.acos(1 - (2 * k) / N_CORE);
-      const theta = Math.PI * (1 + Math.sqrt(5)) * k;
-      corePts.push({
-        x: 15 * Math.cos(theta) * Math.sin(phi),
-        y: 15 * Math.cos(phi),
-        z: 15 * Math.sin(theta) * Math.sin(phi),
-      });
-    }
-    // anneaux
+    // anneaux mécaniques autour de la plaque
     function ring(r, n, tiltX, tiltZ) {
       const pts = [];
       const cx = Math.cos(tiltX), sx = Math.sin(tiltX);
       const cz = Math.cos(tiltZ), sz = Math.sin(tiltZ);
       for (let i = 0; i < n; i++) {
         const a = (i / n) * Math.PI * 2;
-        let x = r * Math.cos(a), y = 0, z = r * Math.sin(a);
-        let y1 = y * cx - z * sx, z1 = y * sx + z * cx;
-        let x2 = x * cz - y1 * sz, y2 = x * sz + y1 * cz;
-        pts.push({ x: x2, y: y2, z: z1, a });
+        const x = r * Math.cos(a), z = r * Math.sin(a);
+        const y1 = -z * sx, z1 = z * cx;
+        pts.push({ x: x * cz - y1 * sz, y: x * sz + y1 * cz, z: z1 });
       }
       return pts;
     }
-    const ring1 = ring(33, 80, 1.15, 0.1);
-    const ring2 = ring(46, 100, 1.35, -0.16);
-    const ring3 = ring(24, 60, 0.6, 0.5);
+    const ring1 = ring(82, 88, 1.18, 0.1);
+    const ring2 = ring(102, 110, 1.4, -0.13);
+    const ring3 = ring(64, 64, 0.55, 0.48);
 
-    // nœuds-outils sur la ceinture externe
+    // nœuds-outils : désorganisés au départ, alignés au scroll
     const nodes = [];
     for (let i = 0; i < 8; i++) {
-      const a = (i / 8) * Math.PI * 2 + 0.35;
+      const a = (i / 8) * Math.PI * 2 + 0.4;
       nodes.push({
-        x: 54 * Math.cos(a),
-        y: (i % 2 === 0 ? 9 : -8) + Math.sin(a * 2) * 3,
-        z: 54 * Math.sin(a),
+        bx: 118 * Math.cos(a),
+        by: (i % 2 === 0 ? 12 : -11) + Math.sin(a * 2) * 4,
+        bz: 118 * Math.sin(a),
+        dx: (Math.random() - 0.5) * 46,
+        dy: (Math.random() - 0.5) * 34,
+        dz: (Math.random() - 0.5) * 46,
       });
     }
-
-    // trajectoire de sortie ascendante (référence à la flèche du logo)
-    function sortiePos(u) {
+    function nodePos(n, ordre) {
+      const d = 1 - ordre;
+      return { x: n.bx + n.dx * d, y: n.by + n.dy * d, z: n.bz + n.dz * d };
+    }
+    // point d'entrée sur la tranche de la plaque (vers le centre)
+    function rimPos(n, ordre) {
+      const p = nodePos(n, ordre);
+      const l = Math.hypot(p.x, p.y, p.z) || 1;
+      return { x: (p.x / l) * 62, y: (p.y / l) * 62 * 0.45, z: (p.z / l) * 62 };
+    }
+    function courbe(pA, pB, u) {
+      // bézier quadratique bombée vers le haut
+      const mx = (pA.x + pB.x) / 2, my = (pA.y + pB.y) / 2 + 20, mz = (pA.z + pB.z) / 2;
+      const v = 1 - u;
       return {
-        x: 10 + u * 58,
-        y: 4 + u * 52 + Math.sin(u * Math.PI) * 6,
-        z: 2 - u * 6,
+        x: v * v * pA.x + 2 * v * u * mx + u * u * pB.x,
+        y: v * v * pA.y + 2 * v * u * my + u * u * pB.y,
+        z: v * v * pA.z + 2 * v * u * mz + u * u * pB.z,
       };
     }
 
-    // particules de données : cycle déterministe
+    // trajectoire de croissance (prolonge la flèche du logo)
+    const exitK = mobile ? 0.6 : 1;
+    function sortiePos(u) {
+      return {
+        x: (30 + u * 62) * exitK,
+        y: (10 + u * 74 + Math.sin(u * Math.PI) * 7) * exitK,
+        z: 2 - u * 8,
+      };
+    }
+
+    // particules de données
     const flux = [];
     for (let i = 0; i < N_FLUX; i++) {
       const a = Math.random() * Math.PI * 2;
       const b = Math.acos(Math.random() * 2 - 1);
-      const r = 62 + Math.random() * 34;
+      const r = 132 + Math.random() * 44;
       flux.push({
         cx: r * Math.cos(a) * Math.sin(b),
-        cy: r * Math.cos(b) * 0.7,
+        cy: r * Math.cos(b) * 0.6,
         cz: r * Math.sin(a) * Math.sin(b),
         node: i % nodes.length,
         phase: Math.random(),
@@ -461,26 +587,23 @@
         rang: i / N_FLUX,
       });
     }
-
     const easeInOut = (t) => t * t * (3 - 2 * t);
 
-    /* ----- rendu ----- */
     let W, H, cx0, cy0, scale;
     function resize() {
-      const r = hero.getBoundingClientRect();
-      W = r.width; H = r.height;
-      canvas.width = Math.round(W * DPR);
-      canvas.height = Math.round(H * DPR);
-      canvas.style.width = W + "px";
-      canvas.style.height = H + "px";
-      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-      if (narrowQuery.matches) {
-        cx0 = W * 0.5; cy0 = H * 0.84;
-        scale = (W * 0.8) / 130;
-      } else {
-        cx0 = W * 0.72; cy0 = H * 0.46;
-        scale = Math.min(W * 0.4, H * 0.74) / 128;
+      const hr = hero.getBoundingClientRect();
+      W = hr.width; H = hr.height;
+      for (const [cv, cx] of [[canvasB, ctxB], [canvasF, ctxF]]) {
+        cv.width = Math.round(W * DPR);
+        cv.height = Math.round(H * DPR);
+        cv.style.width = W + "px";
+        cv.style.height = H + "px";
+        cx.setTransform(DPR, 0, 0, DPR, 0, 0);
       }
+      const pz = plaqueZone.getBoundingClientRect();
+      cx0 = pz.left - hr.left + pz.width / 2;
+      cy0 = pz.top - hr.top + pz.height / 2;
+      scale = pz.width / 132;
     }
     window.addEventListener("resize", resize);
     resize();
@@ -504,7 +627,7 @@
       scrollP = clamp(window.scrollY / (H * 0.9), 0, 1);
     }, { passive: true });
 
-    const F = 300;
+    const F = 320;
     let running = true;
     const heroObs = new IntersectionObserver((es) => {
       es.forEach((e) => { running = e.isIntersecting; });
@@ -514,7 +637,7 @@
       running = !document.hidden && hero.getBoundingClientRect().bottom > 0;
     });
 
-    const draws = [];
+    const drawsB = [], drawsF = [];
     let t0 = null;
 
     function projette(p, cyaw, syaw, cpit, spit) {
@@ -525,6 +648,16 @@
       const persp = F / (F + z2);
       return { sx: cx0 + x1 * scale * persp, sy: cy0 - y2 * scale * persp, z: z2, persp };
     }
+    function pousse(pr, s, r, g, b, a, carre) {
+      (pr.z >= 0 ? drawsB : drawsF).push({ z: pr.z, x: pr.sx, y: pr.sy, s, r, g, b, a, carre });
+    }
+    function ligne(cx, pts, style, width) {
+      cx.strokeStyle = style;
+      cx.lineWidth = width;
+      cx.beginPath();
+      pts.forEach((p, i) => (i === 0 ? cx.moveTo(p.sx, p.sy) : cx.lineTo(p.sx, p.sy)));
+      cx.stroke();
+    }
 
     function frame(now) {
       requestAnimationFrame(frame);
@@ -534,167 +667,132 @@
 
       smx = lerp(smx, pmx, 0.045);
       smy = lerp(smy, pmy, 0.045);
-      const yaw = t * 0.00016 + smx * 0.3;
-      const pitch = -0.34 + smy * 0.12;
+      const yaw = t * 0.00014 + smx * 0.28;
+      const pitch = -0.3 + smy * 0.11;
       const cyaw = Math.cos(yaw), syaw = Math.sin(yaw);
       const cpit = Math.cos(pitch), spit = Math.sin(pitch);
-      // repère fixe pour la trajectoire de croissance : toujours vers le haut-droit
-      const yawF = -0.15 + smx * 0.08;
+      const yawF = -0.12 + smx * 0.08;
       const cyawF = Math.cos(yawF), syawF = Math.sin(yawF);
 
-      // part de flux "organisés" : augmente avec le scroll
-      const ordre = clamp(0.45 + scrollP * 0.55 + Math.min(t / 14000, 0.15), 0, 0.97);
+      const ordre = clamp(0.42 + scrollP * 0.58 + Math.min(t / 16000, 0.14), 0, 0.97);
       const alphaG = 1 - scrollP * 0.35;
 
-      draws.length = 0;
+      drawsB.length = 0;
+      drawsF.length = 0;
+      ctxB.clearRect(0, 0, W, H);
+      ctxF.clearRect(0, 0, W, H);
 
-      // noyau (rotation propre lente)
-      const rot = t * 0.00028;
-      const cr = Math.cos(rot), sr = Math.sin(rot);
-      for (const p of corePts) {
-        const px = p.x * cr + p.z * sr;
-        const pz = -p.x * sr + p.z * cr;
-        const pr = projette({ x: px, y: p.y, z: pz }, cyaw, syaw, cpit, spit);
-        // éclairage : haut-droit doré, bas-gauche graphite
-        const l = clamp(0.35 + (px / 30) * 0.35 + (p.y / 30) * 0.45, 0.12, 1);
-        draws.push({
-          z: pr.z, x: pr.sx, y: pr.sy,
-          s: 2.3 * scale * 0.16 * pr.persp + 0.8,
-          r: 26 + 150 * l * 0.9, g: 26 + 122 * l * 0.82, b: 28 + 60 * l * 0.6,
-          a: 0.9 * alphaG,
-        });
-      }
-      // anneaux métalliques
-      const wob = t * 0.00035;
-      for (const [pts, sp, lum] of [[ring1, 1, 0.5], [ring2, -0.6, 0.34], [ring3, 1.6, 0.85]]) {
+      // anneaux (rotation propre)
+      const wob = t * 0.0003;
+      for (const [pts, sp, or] of [[ring1, 1, false], [ring2, -0.55, false], [ring3, 1.5, true]]) {
         const c2 = Math.cos(wob * sp), s2 = Math.sin(wob * sp);
         for (const p of pts) {
           const px = p.x * c2 + p.z * s2;
           const pz = -p.x * s2 + p.z * c2;
           const pr = projette({ x: px, y: p.y, z: pz }, cyaw, syaw, cpit, spit);
-          const or = lum > 0.7;
-          draws.push({
-            z: pr.z, x: pr.sx, y: pr.sy,
-            s: (or ? 1.15 : 1.35) * pr.persp,
-            r: or ? 226 : 122, g: or ? 177 : 126, b: or ? 38 : 134,
-            a: (or ? 0.55 : 0.4) * alphaG,
-          });
+          pousse(pr, (or ? 1.2 : 1.45) * pr.persp,
+            or ? 226 : 128, or ? 177 : 132, or ? 38 : 140,
+            (or ? 0.6 : 0.42) * alphaG);
         }
       }
-      // nœuds-outils + liaisons vers le noyau
-      ctx.clearRect(0, 0, W, H);
-      ctx.lineWidth = 1;
-      for (const n of nodes) {
-        const pr = projette(n, cyaw, syaw, cpit, spit);
-        const pc = projette({ x: n.x * 0.28, y: n.y * 0.28, z: n.z * 0.28 }, cyaw, syaw, cpit, spit);
-        ctx.strokeStyle = "rgba(167, 171, 178, " + (0.14 * alphaG).toFixed(3) + ")";
-        ctx.beginPath();
-        ctx.moveTo(pr.sx, pr.sy);
-        ctx.lineTo(pc.sx, pc.sy);
-        ctx.stroke();
-        draws.push({
-          z: pr.z, x: pr.sx, y: pr.sy,
-          s: 3.4 * pr.persp, carre: true,
-          r: 200, g: 203, b: 210, a: 0.85 * alphaG,
-        });
+
+      // nœuds-outils + câbles courbes + impulsions
+      nodes.forEach((n, i) => {
+        const np = nodePos(n, ordre);
+        const rp = rimPos(n, ordre);
+        const pts = [];
+        for (let u = 0; u <= 1.001; u += 0.1) {
+          pts.push(projette(courbe(np, rp, u), cyaw, syaw, cpit, spit));
+        }
+        ligne(ctxB, pts, "rgba(167, 171, 178, " + (0.15 * alphaG).toFixed(3) + ")", 1);
+        // impulsion lumineuse le long du câble
+        const pu = ((t / 1500) + i * 0.37) % 1;
+        const pp = projette(courbe(np, rp, easeInOut(pu)), cyaw, syaw, cpit, spit);
+        pousse(pp, 2.2 * pp.persp, 242, 204, 85, (0.35 + ordre * 0.45) * alphaG);
+        // le nœud
+        const pr = projette(np, cyaw, syaw, cpit, spit);
+        pousse(pr, 4.4 * pr.persp, 205, 208, 215, 0.9 * alphaG, true);
+        pousse(pr, 8.5 * pr.persp, 226, 177, 38, 0.12 * ordre * alphaG);
+      });
+
+      // trajectoire de croissance (repère fixe) + flèche — au premier plan
+      const ta = 0.3 + ordre * 0.55;
+      const traj = [];
+      for (let u = 0; u <= 1.001; u += 0.08) {
+        traj.push(projette(sortiePos(u), cyawF, syawF, cpit, spit));
       }
-      // trajectoire ascendante + pointe de flèche
-      const ta = 0.25 + ordre * 0.55;
-      ctx.strokeStyle = "rgba(226, 177, 38, " + (0.3 * ta * alphaG).toFixed(3) + ")";
-      ctx.lineWidth = 1.4;
-      ctx.beginPath();
-      for (let u = 0; u <= 1.001; u += 0.1) {
-        const pr = projette(sortiePos(u), cyawF, syawF, cpit, spit);
-        if (u === 0) ctx.moveTo(pr.sx, pr.sy);
-        else ctx.lineTo(pr.sx, pr.sy);
-      }
-      ctx.stroke();
-      const tip = projette(sortiePos(1), cyawF, syawF, cpit, spit);
-      const avant = projette(sortiePos(0.9), cyawF, syawF, cpit, spit);
-      const ang = Math.atan2(tip.sy - avant.sy, tip.sx - avant.sx);
-      ctx.strokeStyle = "rgba(226, 177, 38, " + (0.7 * ta * alphaG).toFixed(3) + ")";
-      ctx.lineWidth = 1.8;
-      ctx.beginPath();
-      ctx.moveTo(tip.sx, tip.sy);
-      ctx.lineTo(tip.sx - 12 * Math.cos(ang - 0.45), tip.sy - 12 * Math.sin(ang - 0.45));
-      ctx.moveTo(tip.sx, tip.sy);
-      ctx.lineTo(tip.sx - 12 * Math.cos(ang + 0.45), tip.sy - 12 * Math.sin(ang + 0.45));
-      ctx.stroke();
+      ligne(ctxF, traj, "rgba(226, 177, 38, " + (0.34 * ta * alphaG).toFixed(3) + ")", 1.5);
+      const tip = traj[traj.length - 1];
+      const avantT = traj[traj.length - 2];
+      const ang = Math.atan2(tip.sy - avantT.sy, tip.sx - avantT.sx);
+      ctxF.strokeStyle = "rgba(242, 204, 85, " + (0.85 * ta * alphaG).toFixed(3) + ")";
+      ctxF.lineWidth = 2;
+      ctxF.beginPath();
+      ctxF.moveTo(tip.sx, tip.sy);
+      ctxF.lineTo(tip.sx - 13 * Math.cos(ang - 0.45), tip.sy - 13 * Math.sin(ang - 0.45));
+      ctxF.moveTo(tip.sx, tip.sy);
+      ctxF.lineTo(tip.sx - 13 * Math.cos(ang + 0.45), tip.sy - 13 * Math.sin(ang + 0.45));
+      ctxF.stroke();
 
       // particules de données
       for (const p of flux) {
         const organise = p.rang < ordre;
-        let pos, col, al, taille = 1.6;
         if (!organise) {
-          // chaos : dérive douce, teinte bleu froid
-          const w1 = t * 0.0004 + p.seed;
-          pos = {
-            x: p.cx + Math.sin(w1) * 7,
-            y: p.cy + Math.cos(w1 * 0.8) * 7,
-            z: p.cz + Math.sin(w1 * 0.6) * 7,
-          };
-          col = [127, 180, 217];
-          al = 0.34;
-        } else {
-          const u = ((t / CYCLE) + p.phase) % 1;
-          const n = nodes[p.node];
-          if (u < 0.34) {
-            // approche du nœud
-            const k = easeInOut(u / 0.34);
-            pos = { x: lerp(p.cx, n.x, k), y: lerp(p.cy, n.y, k), z: lerp(p.cz, n.z, k) };
-            col = [lerp(127, 226, k), lerp(180, 190, k), lerp(217, 120, k)];
-            al = 0.4 + k * 0.25;
-          } else if (u < 0.62) {
-            // nœud → noyau
-            const k = easeInOut((u - 0.34) / 0.28);
-            pos = { x: lerp(n.x, 0, k), y: lerp(n.y, 0, k), z: lerp(n.z, 0, k) };
-            col = [226, lerp(190, 177, k), lerp(120, 38, k)];
-            al = 0.7;
-          } else {
-            // sortie ascendante (repère fixe, comme la flèche)
-            const k = easeInOut((u - 0.62) / 0.38);
-            pos = sortiePos(k);
-            col = [lerp(226, 242, k), lerp(177, 204, k), lerp(38, 85, k)];
-            al = 0.85 * (1 - Math.pow(k, 3));
-            taille = 1.9 - k * 0.7;
-            const prS = projette(pos, cyawF, syawF, cpit, spit);
-            draws.push({
-              z: prS.z, x: prS.sx, y: prS.sy,
-              s: taille * prS.persp * (scale * 0.055 + 0.9),
-              r: col[0], g: col[1], b: col[2],
-              a: al * alphaG,
-            });
-            continue;
-          }
+          const w1 = t * 0.00038 + p.seed;
+          const pr = projette({
+            x: p.cx + Math.sin(w1) * 8,
+            y: p.cy + Math.cos(w1 * 0.8) * 8,
+            z: p.cz + Math.sin(w1 * 0.6) * 8,
+          }, cyaw, syaw, cpit, spit);
+          pousse(pr, 1.5 * pr.persp * (scale * 0.24 + 0.6), 127, 180, 217, 0.32 * alphaG);
+          continue;
         }
-        const pr = projette(pos, cyaw, syaw, cpit, spit);
-        draws.push({
-          z: pr.z, x: pr.sx, y: pr.sy,
-          s: taille * pr.persp * (scale * 0.055 + 0.9),
-          r: col[0], g: col[1], b: col[2],
-          a: al * alphaG,
-        });
+        const u = ((t / CYCLE) + p.phase) % 1;
+        const n = nodes[p.node];
+        const np = nodePos(n, ordre);
+        if (u < 0.36) {
+          const k = easeInOut(u / 0.36);
+          const pr = projette({
+            x: lerp(p.cx, np.x, k), y: lerp(p.cy, np.y, k), z: lerp(p.cz, np.z, k),
+          }, cyaw, syaw, cpit, spit);
+          pousse(pr, 1.6 * pr.persp * (scale * 0.24 + 0.6),
+            lerp(127, 226, k), lerp(180, 190, k), lerp(217, 110, k), (0.38 + k * 0.25) * alphaG);
+        } else if (u < 0.6) {
+          const k = easeInOut((u - 0.36) / 0.24);
+          const pos = courbe(np, rimPos(n, ordre), k);
+          const pr = projette(pos, cyaw, syaw, cpit, spit);
+          pousse(pr, 1.8 * pr.persp * (scale * 0.24 + 0.6), 226, 177, 38, 0.7 * (1 - k * 0.5) * alphaG);
+        } else {
+          const k = easeInOut((u - 0.6) / 0.4);
+          const pr = projette(sortiePos(k), cyawF, syawF, cpit, spit);
+          drawsF.push({
+            z: -1, x: pr.sx, y: pr.sy,
+            s: (2 - k * 0.8) * pr.persp * (scale * 0.24 + 0.6),
+            r: lerp(226, 242, k), g: lerp(177, 208, k), b: lerp(38, 90, k),
+            a: 0.85 * (1 - Math.pow(k, 3)) * alphaG,
+          });
+        }
       }
 
-      // tri du peintre : lointain d'abord
-      draws.sort((a, b) => b.z - a.z);
-      for (const d of draws) {
-        if (d.a <= 0.02) continue;
-        ctx.globalAlpha = d.a;
-        ctx.fillStyle = "rgb(" + (d.r | 0) + "," + (d.g | 0) + "," + (d.b | 0) + ")";
-        if (d.carre) {
-          ctx.fillRect(d.x - d.s / 2, d.y - d.s / 2, d.s, d.s);
-        } else {
-          ctx.beginPath();
-          ctx.arc(d.x, d.y, Math.max(d.s, 0.5), 0, Math.PI * 2);
-          ctx.fill();
+      // tri du peintre puis rendu sur chaque canvas
+      for (const [cx, arr] of [[ctxB, drawsB], [ctxF, drawsF]]) {
+        arr.sort((a, b) => b.z - a.z);
+        for (const d of arr) {
+          if (d.a <= 0.02) continue;
+          cx.globalAlpha = d.a;
+          cx.fillStyle = "rgb(" + (d.r | 0) + "," + (d.g | 0) + "," + (d.b | 0) + ")";
+          if (d.carre) cx.fillRect(d.x - d.s / 2, d.y - d.s / 2, d.s, d.s);
+          else {
+            cx.beginPath();
+            cx.arc(d.x, d.y, Math.max(d.s, 0.5), 0, Math.PI * 2);
+            cx.fill();
+          }
         }
+        cx.globalAlpha = 1;
       }
-      ctx.globalAlpha = 1;
     }
 
     if (reducedMotion) {
-      // rendu statique unique : système organisé, pas d'animation
       scrollP = 0.9;
       const once = () => {
         running = true;
@@ -705,7 +803,7 @@
         window.requestAnimationFrame = raf;
       };
       once();
-      window.addEventListener("resize", once);
+      window.addEventListener("resize", () => { resize(); once(); });
     } else {
       requestAnimationFrame(frame);
     }

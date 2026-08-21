@@ -8,8 +8,9 @@
   <meta name="description" content="SCIA analyse votre fonctionnement, identifie les pertes de temps et conçoit des agents IA et des automatisations sur mesure pour PME, TPE et indépendants — sans bouleverser vos outils existants.">
   <link rel="canonical" href="https://sciapro71.github.io/scia-site/">
 
-  <!-- Favicon : logo SCIA -->
-  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><circle cx="60" cy="60" r="56" fill="%23050505" stroke="%23E2B126" stroke-width="3"/><path d="M16 70 C42 66 62 64 84 55 L97 44" fill="none" stroke="%23E2B126" stroke-width="5" stroke-linecap="round"/><path d="M97 44 l-2 12 M97 44 l-12 -1" fill="none" stroke="%23E2B126" stroke-width="5" stroke-linecap="round"/><text x="60" y="76" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="38" font-weight="900" fill="%23F4F4F0" letter-spacing="1">SCIA</text></svg>'>
+  <!-- Favicon : logo officiel SCIA -->
+  <link rel="icon" type="image/png" href="assets/logo-scia-carre.png">
+  <link rel="apple-touch-icon" href="assets/logo-scia-carre.png">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
@@ -41,28 +42,9 @@
 </head>
 <body>
 
-  <!-- ===== LOGO SCIA (défini une fois, réutilisé partout) ===== -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <defs>
-      <linearGradient id="orScia" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0" stop-color="#F2CC55"/>
-        <stop offset="0.55" stop-color="#E2B126"/>
-        <stop offset="1" stop-color="#C9971B"/>
-      </linearGradient>
-      <symbol id="logoScia" viewBox="0 0 120 120">
-        <circle cx="60" cy="60" r="56.5" fill="#050505" stroke="url(#orScia)" stroke-width="2"/>
-        <path d="M14 71 C40 67 60 65 82 57" fill="none" stroke="url(#orScia)" stroke-width="4" stroke-linecap="round"/>
-        <path d="M20 79 C44 76 64 73 84 66" fill="none" stroke="url(#orScia)" stroke-width="2" stroke-linecap="round" opacity="0.65"/>
-        <text x="60" y="72" text-anchor="middle" font-family="'Space Grotesk', 'Arial Black', sans-serif" font-size="31" font-weight="700" fill="#F4F4F0" letter-spacing="1">SCIA</text>
-        <path d="M82 57 L99 42" fill="none" stroke="url(#orScia)" stroke-width="4" stroke-linecap="round"/>
-        <path d="M99 42 l-3.5 12.5 M99 42 l-12.8 -0.6" fill="none" stroke="url(#orScia)" stroke-width="4" stroke-linecap="round"/>
-      </symbol>
-    </defs>
-  </svg>
-
   <!-- ===== PRÉLOADER ===== -->
   <div class="preloader" id="preloader" aria-hidden="true">
-    <svg class="preloader-logo"><use href="#logoScia"/></svg>
+    <img class="preloader-logo" src="assets/logo-scia-transparent.png" alt="" width="632" height="218">
     <div class="preloader-bar"><span id="preloaderBar"></span></div>
   </div>
 
@@ -73,12 +55,8 @@
   <!-- ===== HEADER ===== -->
   <header class="nav" id="nav">
     <div class="nav-inner">
-      <a href="#accueil" class="brand" aria-label="SCIA — retour à l'accueil">
-        <svg class="brand-logo"><use href="#logoScia"/></svg>
-        <span class="brand-text">
-          <span class="brand-name">SCIA</span>
-          <span class="brand-tag">Automatisation &amp; agents IA</span>
-        </span>
+      <a href="#accueil" class="brand" aria-label="SCIA — retour en haut de page">
+        <img class="brand-img" src="assets/logo-scia-transparent.png" alt="SCIA" width="632" height="218">
       </a>
       <nav class="nav-links" id="navLinks" aria-label="Navigation principale">
         <a href="#expertises">Expertises</a>
@@ -100,6 +78,18 @@
     <section class="hero" id="accueil">
       <div class="hero-bg" aria-hidden="true"></div>
       <canvas id="engineCanvas" aria-hidden="true"></canvas>
+      <div class="plaque-zone" id="plaqueZone" aria-hidden="true">
+        <div class="plaque3d" id="plaque3d">
+          <div class="plaque-bord"></div>
+          <div class="plaque-face">
+            <span class="plaque-texture"></span>
+            <img class="plaque-logo" src="assets/logo-scia-transparent.png" alt="" width="632" height="218">
+            <span class="plaque-sheen"></span>
+          </div>
+        </div>
+        <span class="plaque-halo"></span>
+      </div>
+      <canvas id="engineCanvasFront" aria-hidden="true"></canvas>
       <div class="container hero-inner">
         <div class="hero-content">
           <p class="hero-label reveal">Automatisation &amp; agents IA sur mesure</p>
@@ -249,28 +239,48 @@
           <span class="sec-index">03 — Méthode</span>
           <h2>De votre problème métier à un <em>système opérationnel</em>.</h2>
         </div>
-        <div class="methode-wrap" id="methodeWrap">
-          <div class="methode-rail" aria-hidden="true"><div class="methode-fill" id="methodeFill"></div></div>
-          <ol class="methode-steps">
-            <li class="mstep">
-              <div class="mstep-head"><span class="mstep-num">01</span><h3>Audit</h3></div>
-              <p>Comprendre le fonctionnement réel, les outils, les contraintes et les objectifs.</p>
+        <div class="pipeline" id="pipeline">
+          <div class="pipe-track" aria-hidden="true"><div class="pipe-fill" id="pipeFill"></div></div>
+          <ol class="pipe-steps">
+            <li class="pstep">
+              <div class="pstep-node" aria-hidden="true"><span class="pstep-ring"></span><span class="pstep-coeur"></span></div>
+              <div class="pstep-carte">
+                <span class="pstep-num">01</span>
+                <h3>Audit</h3>
+                <p>Comprendre le fonctionnement réel, les outils, les contraintes et les objectifs.</p>
+              </div>
             </li>
-            <li class="mstep">
-              <div class="mstep-head"><span class="mstep-num">02</span><h3>Priorisation</h3></div>
-              <p>Identifier les automatisations qui peuvent produire le plus de valeur.</p>
+            <li class="pstep">
+              <div class="pstep-node" aria-hidden="true"><span class="pstep-ring"></span><span class="pstep-coeur"></span></div>
+              <div class="pstep-carte">
+                <span class="pstep-num">02</span>
+                <h3>Priorisation</h3>
+                <p>Identifier les automatisations qui peuvent produire le plus de valeur.</p>
+              </div>
             </li>
-            <li class="mstep">
-              <div class="mstep-head"><span class="mstep-num">03</span><h3>Conception</h3></div>
-              <p>Construire un système adapté aux règles et aux méthodes de l'entreprise.</p>
+            <li class="pstep">
+              <div class="pstep-node" aria-hidden="true"><span class="pstep-ring"></span><span class="pstep-coeur"></span></div>
+              <div class="pstep-carte">
+                <span class="pstep-num">03</span>
+                <h3>Conception</h3>
+                <p>Construire un système adapté aux règles et aux méthodes de l'entreprise.</p>
+              </div>
             </li>
-            <li class="mstep">
-              <div class="mstep-head"><span class="mstep-num">04</span><h3>Déploiement</h3></div>
-              <p>Connecter les outils, tester les scénarios et conserver les validations humaines nécessaires.</p>
+            <li class="pstep">
+              <div class="pstep-node" aria-hidden="true"><span class="pstep-ring"></span><span class="pstep-coeur"></span></div>
+              <div class="pstep-carte">
+                <span class="pstep-num">04</span>
+                <h3>Déploiement</h3>
+                <p>Connecter les outils, tester les scénarios et conserver les validations humaines nécessaires.</p>
+              </div>
             </li>
-            <li class="mstep">
-              <div class="mstep-head"><span class="mstep-num">05</span><h3>Optimisation</h3></div>
-              <p>Mesurer, corriger et faire évoluer le système avec l'activité.</p>
+            <li class="pstep">
+              <div class="pstep-node" aria-hidden="true"><span class="pstep-ring"></span><span class="pstep-coeur"></span></div>
+              <div class="pstep-carte">
+                <span class="pstep-num">05</span>
+                <h3>Optimisation</h3>
+                <p>Mesurer, corriger et faire évoluer le système avec l'activité.</p>
+              </div>
             </li>
           </ol>
         </div>
@@ -301,6 +311,77 @@
           <span class="sec-index">05 — La différence</span>
           <h2>Remplacer la succession de tâches manuelles par un seul <em>flux maîtrisé</em>.</h2>
         </div>
+        <div class="ba reveal" id="baCompare" role="slider" tabindex="0"
+             aria-label="Comparateur avant / avec SCIA — utilisez les flèches du clavier"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-orientation="horizontal">
+          <span class="ba-label ba-label-avant">Avant</span>
+          <span class="ba-label ba-label-apres">Avec SCIA</span>
+          <div class="ba-img ba-before">
+            <svg viewBox="0 0 720 300" aria-hidden="true">
+              <g stroke="#7C818A" fill="none" stroke-width="2">
+                <path d="M120 70 l60 0 0 42 -60 0 Z M120 70 l30 20 30 -20" transform="rotate(-14 150 91)"/>
+                <path d="M300 42 l60 0 0 42 -60 0 Z M300 42 l30 20 30 -20" transform="rotate(9 330 63)"/>
+                <path d="M492 84 l60 0 0 42 -60 0 Z M492 84 l30 20 30 -20" transform="rotate(-7 522 105)"/>
+              </g>
+              <g stroke="#7C818A" fill="rgba(20,23,28,0.9)" stroke-width="2">
+                <g transform="rotate(11 190 205)"><rect x="160" y="176" width="52" height="64" rx="3"/><path d="M170 194h32M170 206h32M170 218h20" fill="none"/></g>
+                <g transform="rotate(-9 400 216)"><rect x="372" y="186" width="52" height="64" rx="3"/><path d="M382 204h32M382 216h32M382 228h20" fill="none"/></g>
+                <g transform="rotate(6 588 206)"><rect x="562" y="178" width="52" height="60" rx="3"/><path d="M572 196h32M572 208h32" fill="none"/></g>
+              </g>
+              <g stroke="#5c616a" stroke-width="1.6" stroke-dasharray="7 9" fill="none">
+                <path d="M186 100 C 240 130 260 160 268 180"/>
+                <path d="M366 86 C 400 120 396 150 398 182"/>
+                <path d="M552 128 C 540 150 560 160 572 176"/>
+                <path d="M220 216 C 300 250 340 236 368 222"/>
+              </g>
+              <g font-family="IBM Plex Mono, monospace" font-size="15" font-weight="600">
+                <g transform="rotate(-8 250 92)"><circle cx="250" cy="92" r="13" fill="none" stroke="#7C818A" stroke-width="2"/><text x="250" y="97" text-anchor="middle" fill="#A7ABB2">!</text></g>
+                <g transform="rotate(10 470 210)"><circle cx="470" cy="210" r="13" fill="none" stroke="#7C818A" stroke-width="2"/><text x="470" y="215" text-anchor="middle" fill="#A7ABB2">!</text></g>
+              </g>
+              <text x="360" y="282" text-anchor="middle" fill="#7C818A" font-family="IBM Plex Mono, monospace" font-size="12" letter-spacing="2">FLUX INTERROMPUS · RESSAISIES · OUBLIS</text>
+            </svg>
+          </div>
+          <div class="ba-img ba-after">
+            <svg viewBox="0 0 720 300" aria-hidden="true">
+              <defs>
+                <linearGradient id="baOr" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#F2CC55"/><stop offset="1" stop-color="#C9971B"/>
+                </linearGradient>
+              </defs>
+              <g stroke="#E2B126" fill="none" stroke-width="2">
+                <path d="M76 96 l56 0 0 40 -56 0 Z M76 96 l28 18 28 -18"/>
+                <rect x="76" y="180" width="56" height="44" rx="3"/>
+                <path d="M88 194h32M88 206h32" />
+              </g>
+              <g stroke="#E2B126" stroke-width="2" fill="none" stroke-dasharray="6 8" class="ba-flux-anime">
+                <path d="M140 116 C 200 116 210 150 262 150"/>
+                <path d="M140 200 C 200 200 210 162 262 156"/>
+                <path d="M424 150 C 470 150 480 116 528 112"/>
+                <path d="M424 156 C 470 160 480 204 528 204"/>
+              </g>
+              <rect x="266" y="118" width="154" height="68" rx="6" fill="#0A0A0C" stroke="url(#baOr)" stroke-width="2"/>
+              <text x="343" y="160" text-anchor="middle" fill="#F4F4F0" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="24" letter-spacing="4">SCIA</text>
+              <g stroke="#E2B126" fill="rgba(20,23,28,0.9)" stroke-width="2">
+                <rect x="532" y="84" width="52" height="58" rx="3"/><path d="M542 100h32M542 112h32M542 124h20" fill="none"/>
+                <rect x="532" y="178" width="52" height="58" rx="3"/><path d="M542 194h32M542 206h32M542 218h20" fill="none"/>
+              </g>
+              <g stroke="#E2B126" stroke-width="2.4" fill="none">
+                <path d="M596 106 l7 8 13 -14"/>
+                <path d="M596 200 l7 8 13 -14"/>
+              </g>
+              <g>
+                <circle cx="655" cy="152" r="17" fill="none" stroke="#A7ABB2" stroke-width="2"/>
+                <circle cx="655" cy="146" r="5" fill="none" stroke="#A7ABB2" stroke-width="2"/>
+                <path d="M646 162 c2 -7 16 -7 18 0" fill="none" stroke="#A7ABB2" stroke-width="2"/>
+                <text x="655" y="192" text-anchor="middle" fill="#A7ABB2" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1">VALIDATION</text>
+              </g>
+              <text x="360" y="282" text-anchor="middle" fill="#E2B126" font-family="IBM Plex Mono, monospace" font-size="12" letter-spacing="2">UN SEUL FLUX · CONTRÔLE HUMAIN CONSERVÉ</text>
+            </svg>
+          </div>
+          <div class="ba-bar" aria-hidden="true"></div>
+          <div class="ba-knob" aria-hidden="true">⇄</div>
+        </div>
+        <p class="ba-hint reveal">Faites glisser le curseur — au doigt ou à la souris.</p>
         <div class="compare reveal">
           <div class="compare-col compare-avant">
             <h3><span class="compare-badge">Avant SCIA</span></h3>
@@ -331,6 +412,7 @@
 
     <!-- ===== CONFIANCE ===== -->
     <section class="section section-graphite" id="confiance">
+      <img class="watermark-logo" src="assets/logo-scia-transparent.png" alt="" aria-hidden="true" loading="lazy">
       <div class="container">
         <div class="sec-head reveal">
           <span class="sec-index">06 — Pourquoi SCIA</span>
@@ -435,6 +517,15 @@
               Expliquez-nous ce qui ralentit votre entreprise. Nous identifierons les processus
               qui méritent réellement d'être automatisés.
             </p>
+            <div class="cta-embleme" id="ctaEmbleme" aria-hidden="true">
+              <span class="embleme-anneau"></span>
+              <span class="embleme-anneau embleme-anneau-2"></span>
+              <svg class="embleme-lignes" viewBox="0 0 300 300">
+                <path d="M150 150 L28 40 M150 150 L272 36 M150 150 L20 210 M150 150 L280 218 M150 150 L150 8" fill="none" stroke="rgba(226,177,38,0.22)" stroke-width="1"/>
+                <path d="M150 150 L28 40 M150 150 L272 36 M150 150 L20 210 M150 150 L280 218 M150 150 L150 8" fill="none" stroke="#E2B126" stroke-width="1.4" stroke-dasharray="3 40" class="embleme-flux"/>
+              </svg>
+              <img class="embleme-logo" src="assets/logo-scia-transparent.png" alt="" loading="lazy">
+            </div>
             <div class="contact-directs">
               <a class="direct" href="mailto:sc.iapro71@gmail.com">
                 <span class="direct-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
@@ -506,12 +597,9 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-haut">
-        <a href="#accueil" class="brand" aria-label="SCIA — haut de page">
-          <svg class="brand-logo"><use href="#logoScia"/></svg>
-          <span class="brand-text">
-            <span class="brand-name">SCIA</span>
-            <span class="brand-tag">Automatisation et agents IA sur mesure.</span>
-          </span>
+        <a href="#accueil" class="brand brand-footer" aria-label="SCIA — haut de page">
+          <img class="brand-img" src="assets/logo-scia-transparent.png" alt="SCIA" width="632" height="218" loading="lazy">
+          <span class="brand-tag">Automatisation et agents IA sur mesure.</span>
         </a>
         <nav class="footer-nav" aria-label="Navigation pied de page">
           <a href="#expertises">Expertises</a>
