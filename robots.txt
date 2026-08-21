@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sciapro71.github.io/scia-site/sitemap.xml
